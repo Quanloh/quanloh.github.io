@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Projectile Origin</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<style>
+            * {
+				margin: 0px;
+				padding: 0px;
+				box-sizing: border-box;
+				font-family: sans-serif;
+            }
+
+			html {
+				height: 100%;
+			}
+			
+            body {
+                width: 100%;
+                background-color: gray;
+				background-image: url('images/bg.jpg');
+                background-repeat: no-repeat;
+                background-position: center center;
+				background-size: cover;
+            }
+			
+			input {
+				outline: none;
+				border: none;
+				font-size: 12pt;
+				height: 1.6em;
+			}
+			input::placeholder{
+				font-size: 10pt;
+				font-color: gray;
+			}
+			.input-column::before{
+				content:"";
+				display: block;
+				position: relative;
+				bottom: -2px;
+				height: 2px;
+				background: rgba(0,0,0,0.7);;
+				width: 0px;
+				transition: all 0.4s;
+				background: linear-gradient(45deg, #d5007d, #e53935);
+			}
+			.input-column::after{
+			   content: attr(data-placeholder);
+				   display: block;
+				   width: 100%;
+				   position: absolute;
+				   top: 0px;
+				   left: 0;
+				   transition: all 0.4s;
+			}
+			.input-column:focus + .input-column::before{
+				width:100%
+			}
+			label {
+				font-size: 12pt;
+				margin: 3px 0px 3px 0px;
+			}
+			.main-bg {
+                width: 100%;
+                min-height: 100vh;
+				height:100%;
+                display: flex;
+				flex-wrap: wrap;
+                align-items: center;
+                justify-content: center;
+				padding: 15px;
+                background-color: rgba(255,255,255,0.6);
+			}
+			.main-container {
+                width: 790px;
+				background-color: rgba(255,255,255,1);
+				border-radius: 10px;
+				padding: 80px 50px 60px 50px;
+				overflow: hidden;
+			}
+			.main-form {
+				width: 100%;
+			}
+			.form-content {
+				width: 100%;
+			}
+			.form-title {
+				display: block;
+				font-size:24pt;
+				text-align: center;
+				position: relative;
+				padding-bottom:50px;
+				line-height:1.2;
+			}
+            .form-item {
+                display: grid;
+				margin: 10px 0px 12px 0px;
+            }
+			.form-buttons {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: center;
+			}
+			@media (max-width: 576px) {
+				.main-container {
+					padding: 72px 15px 90px 15px;
+				}
+			}
+			#print {
+				min-width: 7em ;
+			}
+			#reset {
+				min-width: 7em;
+			}
+			input[type=button] {
+				border: solid;
+				margin: 5px 20px 5px 20px ;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="main-bg">
+			<div class="main-container">
+				<div class="main-form">
+					<form class="form-content" name="Form">
+						<span class="form-title">
+							Projectile Origin
+						</span>
+						<div class="form-item">
+							<label for="name">Name: </label>
+							<input type="text" class="input-column" name="name" placeholder="NAME" data-validate="Name/ID is required">
+							<span class="input-column"></span>
+						</div>
+						<div class="form-item">
+							<label for="date">Date: </label>
+							<input type="date" class="input-column" name="date" data-validate="Date is required">
+							<span class="input-column"></span>
+						</div>
+						<div class="form-item">
+							<label for="time">Time: </label>
+							<input type="time" class="input-column" name="time" data-validate="Time is required">
+							<span class="input-column"></span>
+						</div>
+						<div class="form-item">
+							<label for="distance">Distance: </label>
+							<input type="number" class="input-column" name="distance" OnChange="plusone()" data-validate="Distance is required">
+							<span class="input-column"></span>
+						</div>
+						<span class="result-title">
+							Possible residencing height
+						</span>
+						<div class="form-item">
+							<label for="upperlimit">Upper Limit: </label>
+							<input type="number" name="upperlimit">
+						</div>
+						<div class="form-item">
+							<label for="lowerlimit">Lower Limit: </label>
+							<input type="number" name="lowerlimit">
+						</div>
+						<div class="form-buttons">
+							<input type="button" name="print" value="Print" id="print">
+							<input type="button" name="reset" value="Reset" id="reset">
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script language="JavaScript">
+
+		var input = 0;
+		var result = 0;
+
+		function plusone()
+		{
+			input = document.Form.distance.value;
+			result = eval(input) + 1;
+			document.Form.lowerlimit.value = result;
+		}
+	</script>
+</html>
