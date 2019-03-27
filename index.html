@@ -17,7 +17,7 @@
 			
             body {
                 width: 100%;
-		background-image: url('images/bg.png');
+				background-image: url('images/bg.jpg');
                 background-repeat: no-repeat;
                 background-position: center center;
             }
@@ -115,6 +115,11 @@
 			@media (max-width: 576px) {
 				.main-container {
 					padding: 72px 15px 90px 15px;
+				}
+			}
+			@media print {
+				.form-buttons {
+					display: none !important;
 				}
 			}
 			#print {
