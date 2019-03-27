@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Projectile Origin</title>
+		<title>Initial Height Finder</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<style>
             * {
@@ -34,6 +34,7 @@
 				font-size: 10pt;
 				font-color: gray;
 			}
+
 			.input-column::before{
 				content:"";
 				display: block;
@@ -43,22 +44,24 @@
 				background: rgba(0,0,0,0.7);;
 				width: 0px;
 				transition: all 0.4s;
-				background: linear-gradient(45deg, #d5007d, #e53935);
+				background: linear-gradient(45deg, #092b60, #182a47);
 			}
 			.input-column::after{
 			   content: attr(data-placeholder);
-				   display: block;
-				   width: 100%;
-				   position: absolute;
-				   top: 0px;
-				   left: 0;
-				   transition: all 0.4s;
+			   display: block;
+			   width: 100%;
+			   position: absolute;
+			   top: 0px;
+			   left: 0;
+			   transition: all 0.4s;
 			}
 			.input-column:focus + .input-column::before{
-				width:100%
+				width:100%;
 			}
+
 			label {
-				font-size: 12pt;
+				font-size: 14pt;
+				font-weight: bold;
 				margin: 3px 0px 3px 0px;
 			}
 			.main-bg {
@@ -88,19 +91,28 @@
 			.form-title {
 				display: block;
 				font-size:24pt;
+				font-weight: bold;
 				text-align: center;
-				position: relative;
-				padding-bottom:50px;
 				line-height:1.2;
+				margin-bottom: 30px;
 			}
             .form-item {
                 display: grid;
-				margin: 10px 0px 12px 0px;
+				margin: 10px 0px 20px 0px;
             }
 			.form-buttons {
 				display: flex;
 				flex-wrap: wrap;
 				justify-content: center;
+			}
+			.result-title {
+				display: block;
+				font-size: 20pt;
+				font-weight: bold;
+				text-align: center;
+				line-height: 1.2;
+				margin-top: 25px;
+				margin-bottom: 15px;
 			}
 			@media (max-width: 576px) {
 				.main-container {
@@ -114,9 +126,19 @@
 				min-width: 7em;
 			}
 			input[type=button] {
-				border: solid;
-				margin: 5px 20px 5px 20px ;
+				margin: 5px 20px 5px 20px;
+				border-radius: 3px;
+				background-color: #4e5b70;
+				color: white;
 			}
+			#answer {
+				margin-bottom: 20px;
+				display: block;
+				text-align: center;
+				line-height: 1.2;
+				font-size: 16pt;
+			}
+
 		</style>
 	</head>
 	<body>
@@ -125,11 +147,11 @@
 				<div class="main-form">
 					<form class="form-content" name="Form">
 						<span class="form-title">
-							Projectile Origin
+							Initial Height Finder
 						</span>
 						<div class="form-item">
-							<label for="name">Name: </label>
-							<input type="text" class="input-column" name="name" placeholder="NAME" data-validate="Name/ID is required">
+							<label for="name">Name/ID: </label>
+							<input type="text" class="input-column" name="name" placeholder="Name/ID of inspector" data-validate="Name/ID is required">
 							<span class="input-column"></span>
 						</div>
 						<div class="form-item">
@@ -143,24 +165,20 @@
 							<span class="input-column"></span>
 						</div>
 						<div class="form-item">
-							<label for="distance">Distance: </label>
-							<input type="number" class="input-column" name="distance" OnChange="plusone()" data-validate="Distance is required">
+							<label for="distance">Distance (unit: meter) </label>
+							<input type="number" class="input-column" name="distance" OnChange="calculate()" data-validate="Distance is required" placeholder="Distance from building edge to victim's hip">
 							<span class="input-column"></span>
 						</div>
+						<hr>
 						<span class="result-title">
-							Possible residencing height
+							Initial Height:
 						</span>
-						<div class="form-item">
-							<label for="upperlimit">Upper Limit: </label>
-							<input type="number" name="upperlimit">
-						</div>
-						<div class="form-item">
-							<label for="lowerlimit">Lower Limit: </label>
-							<input type="number" name="lowerlimit">
-						</div>
+						<span id="answer">
+							Provide distance to see the result.
+						</span>
 						<div class="form-buttons">
-							<input type="button" name="print" value="Print" id="print">
-							<input type="button" name="reset" value="Reset" id="reset">
+							<input type="button" name="print" value="Print" id="print" OnClick=window.print()>
+							<input type="button" name="reset" value="Reset" id="reset" OnClick="resetForm()">
 						</div>
 					</form>
 				</div>
@@ -169,14 +187,25 @@
 	</body>
 	<script language="JavaScript">
 
-		var input = 0;
-		var result = 0;
-
-		function plusone()
+		var x_distance = 0;
+		var y_distance = 0;
+		var g_acc = -9.81; 
+		var ux = 1;
+		function calculate()
 		{
-			input = document.Form.distance.value;
-			result = eval(input) + 1;
-			document.Form.lowerlimit.value = result;
+			x_distance = document.Form.distance.value;
+			y_distance = -(eval(x_distance)/ux) * (0.5) * g_acc * eval(x_distance) / ux;
+			document.getElementById("answer").textContent = y_distance.toFixed(2) + " m";
+		}
+		
+		function resetForm()
+		{
+			document.Form.name.value = "";
+			document.Form.date.value = "";
+			document.Form.time.value = "";
+			document.Form.distance.value = "";
+			document.getElementById("answer").textContent = 'Provide distance to see the result.';
+
 		}
 	</script>
 </html>
