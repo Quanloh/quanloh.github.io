@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Projectile Origin</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script language="JavaScript">
+
+		var input = 0;
+		var result = 0;
+
+		function plusone()
+		{
+			input = document.Form.distance.value;
+			result = eval(input) + 1;
+			document.Form.lowerlimit.value = result;
+		}
+	</script>
+		<style>
+            * {
+				margin: 0px;
+				padding: 0px;
+				box-sizing: border-box;
+				font-family: sans-serif;
+            }
+			html {
+				height: 100%;
+			}
+            body {
+                width: 100%;
+                background-image: url('images/bg.jpg');
+                background-repeat: no-repeat;
+                background-position: center center;
+				background-size: cover;
+            }
+			.main-bg {
+                width: 100%;
+                min-height: 100vh;
+				height:100%;
+                display: flex;
+				flex-wrap: wrap;
+                align-items: center;
+                justify-content: center;
+				padding: 15px;
+                background-color: rgba(255,255,255,0.6);
+			}
+			.main-container {
+                width: 790px;
+				background-color: rgba(255,255,255,1);
+				border-radius: 10px;
+				padding: 80px 50px 60px 50px;
+				overflow: hidden;
+			}
+			.main-form {
+				width: 100%;
+			}
+			.form-content {
+				width: 100%;
+			}
+			.form-title {
+				display: block;
+				font-size:39px;
+				text-align: center;
+				position: relative;
+				padding-bottom:60px;
+				line-height:1.2;
+			}
+			@media (max-width: 576px) {
+				.main-container {
+					padding: 72px 15px 90px 15px;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="main-bg">
+			<div class="main-container">
+				<div class="main-form">
+					<form class="form-content" name="Form">
+						<span class="form-title">
+							Projectile Origin
+						</span>
+						<div class="form-item">
+							<label for="name">Name: </label>
+							<input type="text" name="name" placeholder="NAME">
+						</div>
+						<div class="form-item">
+							<label for="date">Date: </label>
+							<input type="date" name="date">
+						</div>
+						<div class="form-item">
+							<label for="time">Time: </label>
+							<input type="time" name="time">
+						</div>
+						<div class="form-item">
+							<label for="distance">Distance: </label>
+							<input type="number" name="distance" OnChange="plusone()">
+						</div>
+						<span class="result-title">
+							Possible residencing height
+						</span>
+						<div class="form-item">
+							<label for="upperlimit">Upper Limit: </label>
+							<input type="number" name="upperlimit">
+						</div>
+						<div class="form-item">
+							<label for="lowerlimit">Lower Limit: </label>
+							<input type="number" name="lowerlimit">
+						</div>
+						<div class="form-buttons">
+							<input type="button" name="print" value="Print">
+							<input type="button" name="reset" value="Reset">
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
