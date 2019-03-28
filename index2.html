@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Initial Height Finder</title>
+		<title>Foul Play Analyser</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<style>
             * {
@@ -150,7 +150,7 @@
 				<div class="main-form">
 					<form class="form-content" name="Form">
 						<span class="form-title">
-							Initial Height Finder
+							Foul Play Analyser
 						</span>
 						<div class="form-item">
 							<label for="name">Name/ID: </label>
@@ -172,12 +172,16 @@
 							<input type="number" class="input-column" name="distance" OnChange="calculate()" data-validate="Distance is required" placeholder="Distance from building edge to victim's hip">
 							<span class="input-column"></span>
 						</div>
+						<div class="form-item">
+							<label for="Height">Height (unit: meter) </label>
+							<input type="number" class="input-column" name="height" OnChange="calculate()" data-validate="Height is required" placeholder="Expected initial height of falling">
+							<span class="input-column"></span>
 						<hr>
 						<span class="result-title">
-							Initial Height:
+							Chance of Foul Play:
 						</span>
 						<span id="answer">
-							Provide distance to see the result.
+							Provide both distance and height to see the result.
 						</span>
 						<div class="form-buttons">
 							<input type="button" name="print" value="Print" id="print" OnClick=window.print()>
@@ -192,18 +196,28 @@
 
 		var x_distance = 0;
 		var y_distance = 0;
-		var g_acc = -9.81; 
-		var ux = 1;
+		var g_acc = 9.81; 
+		var ux = 0;
 		function calculate()
 		{
 			var val_d = document.Form.distance.value;
+			var val_h = document.Form.height.value;
 
-			if ( val_d !== "") {
+			if ( val_d !== "" && val_h !== "") {
+
 				x_distance = document.Form.distance.value;
-				y_distance = -(eval(x_distance)/ux) * (0.5) * g_acc * eval(x_distance) / ux;
-				document.getElementById("answer").textContent = y_distance.toFixed(2) + " m";
-			} else {
-			document.getElementById("answer").textContent = 'Provide distance to see the result.';
+				y_distance = document.Form.height.value;
+				ux = eval(x_distance)*Math.sqrt(eval(g_acc)/(2*eval(y_distance)));
+				
+				if ( eval(ux) >= 1.2){
+					document.getElementById("answer").textContent = "Hight Chance of Foul Play Observed.";
+				} else {
+					document.getElementById("answer").textContent = "Marginal, more forensic examination is needed." ;
+				}
+
+			} else
+			{
+			document.getElementById("answer").textContent = 'Provide both distance and height to see the result.';
 			}
 		}
 		
@@ -213,7 +227,8 @@
 			document.Form.date.value = "";
 			document.Form.time.value = "";
 			document.Form.distance.value = "";
-			document.getElementById("answer").textContent = 'Provide distance to see the result.';
+			document.Form.height.value = "";
+			document.getElementById("answer").textContent = 'Provide both distance and height to see the result.';
 
 		}
 	</script>
