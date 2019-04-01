@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Initial Height Finder</title>
+		<title>Falling Analysis</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<style>
+
             * {
 				margin: 0px;
 				padding: 0px;
@@ -28,6 +29,7 @@
 				font-size: 12pt;
 				height: 1.6em;
 			}
+
 			input::placeholder{
 				font-size: 10pt;
 				font-color: gray;
@@ -44,6 +46,7 @@
 				transition: all 0.4s;
 				background: linear-gradient(45deg, #092b60, #182a47);
 			}
+
 			.input-column::after{
 			   content: attr(data-placeholder);
 			   display: block;
@@ -53,6 +56,7 @@
 			   left: 0;
 			   transition: all 0.4s;
 			}
+
 			.input-column:focus + .input-column::before{
 				width:100%;
 			}
@@ -62,6 +66,7 @@
 				font-weight: bold;
 				margin: 3px 0px 3px 0px;
 			}
+
 			.main-bg {
                 width: 100%;
                 min-height: 100vh;
@@ -73,73 +78,93 @@
 				padding: 15px;
                 background-color: rgba(255,255,255,0.6);
 			}
+
 			.main-container {
                 width: 790px;
 				background-color: rgba(255,255,255,1);
 				border-radius: 10px;
-				padding: 80px 50px 60px 50px;
+				padding: 60px 50px 60px 50px;
 				overflow: hidden;
 			}
+
 			.main-form {
 				width: 100%;
 			}
+
 			.form-content {
 				width: 100%;
 			}
+
 			.form-title {
 				display: block;
 				font-size:24pt;
 				font-weight: bold;
 				text-align: center;
 				line-height:1.2;
-				margin-bottom: 30px;
+				margin-bottom: 25px;
 			}
+
             .form-item {
                 display: grid;
-				margin: 10px 0px 20px 0px;
+				margin: 7px 0px 12px 0px;
             }
+
 			.form-buttons {
 				display: flex;
 				flex-wrap: wrap;
 				justify-content: center;
+				margin-bottom: 12px;
 			}
-			.result-title {
+
+			.sub-title {
 				display: block;
 				font-size: 20pt;
 				font-weight: bold;
 				text-align: center;
 				line-height: 1.2;
-				margin-top: 25px;
-				margin-bottom: 15px;
+				margin-top: 20px;
+				margin-bottom: 12px;
 			}
+
 			@media (max-width: 576px) {
 				.main-container {
 					padding: 72px 15px 90px 15px;
 				}
 			}
+
 			@media print {
-				.form-buttons {
+				.form-buttons,#selection {
 					display: none !important;
 				}
 			}
-			#print {
+
+			#print,#reset {
 				min-width: 7em ;
+				margin: 8px 20px 8px 20px;
 			}
-			#reset {
-				min-width: 7em;
-			}
-			input[type=button] {
+
+			input[name=button_height],input[name=button_chance] {
+				min-width: 14em ;
+				height: 2.5em;
+				font-size: 14pt;
 				margin: 5px 20px 5px 20px;
+			}
+
+			input[type=button] {
 				border-radius: 3px;
 				background-color: #4e5b70;
 				color: white;
 			}
-			#answer {
+
+			#answer_height,#answer_chance {
 				margin-bottom: 20px;
 				display: block;
 				text-align: center;
 				line-height: 1.2;
 				font-size: 16pt;
+			}
+			.hide {
+				display: none;
 			}
 
 		</style>
@@ -149,40 +174,78 @@
 			<div class="main-container">
 				<div class="main-form">
 					<form class="form-content" name="Form">
+					
 						<span class="form-title">
-							Initial Height Finder
+							Falling Analysis
 						</span>
+
+						<div id="selection">
+							<span class="sub-title">
+								Tool Selection:
+							</span>
+							<div class="form-buttons">
+								<input type="button" name="button_height" value="Falling Height Estimator" OnClick="hidechance()">
+								<input type="button" name="button_chance" value="Foul Play Analyser" OnClick="hideheight()">
+							</div>
+							<hr>
+						</div>
+
+
 						<div class="form-item">
 							<label for="name">Name/ID: </label>
 							<input type="text" class="input-column" name="name" placeholder="Name/ID of inspector" data-validate="Name/ID is required">
 							<span class="input-column"></span>
 						</div>
+
 						<div class="form-item">
 							<label for="date">Date: </label>
 							<input type="date" class="input-column" name="date" data-validate="Date is required">
 							<span class="input-column"></span>
 						</div>
+
 						<div class="form-item">
 							<label for="time">Time: </label>
 							<input type="time" class="input-column" name="time" data-validate="Time is required">
 							<span class="input-column"></span>
 						</div>
-						<div class="form-item">
+
+						<div id="distance" class="form-item hide" >
 							<label for="distance">Distance (unit: meter) </label>
 							<input type="number" class="input-column" name="distance" OnChange="calculate()" data-validate="Distance is required" placeholder="Distance from building edge to victim's hip">
 							<span class="input-column"></span>
 						</div>
-						<hr>
-						<span class="result-title">
-							Initial Height:
-						</span>
-						<span id="answer">
-							Provide distance to see the result.
-						</span>
+
+						<div id="height" class="hide">
+							<hr>
+							<span class="sub-title">
+							 	Estimated Falling Height:
+							</span>
+							<span id="answer_height">
+								Provide distance to see the result.
+							</span>
+						</div>
+
+
+						<div id="chance" class="hide">
+							<div class="form-item">
+								<label for="Height">Height (unit: meter) </label>
+								<input type="number" class="input-column" name="height" OnChange="calculate()" data-validate="Height is required" placeholder="Expected Falling Height">
+								<span class="input-column"></span>
+							</div>
+							<hr>
+							<span class="sub-title">
+								Chance of Foul Play:
+							</span>
+							<span id="answer_chance">
+								Provide both distance and height to see the result.
+							</span>
+						</div>
+
 						<div class="form-buttons">
 							<input type="button" name="print" value="Print" id="print" OnClick=window.print()>
 							<input type="button" name="reset" value="Reset" id="reset" OnClick="resetForm()">
 						</div>
+
 					</form>
 				</div>
 			</div>
@@ -190,31 +253,70 @@
 	</body>
 	<script language="JavaScript">
 
-		var x_distance = 0;
-		var y_distance = 0;
-		var g_acc = -9.81; 
+		var distance = 0;
+		var height = 0;
+		var g_acc = 9.81; 
 		var ux = 1;
+
+		var answer_height = 0;
+		var answer_ux = 0;
+
 		function calculate()
 		{
-			var val_d = document.Form.distance.value;
+			var distance = document.Form.distance.value;
+			var height = document.Form.height.value;
 
-			if ( val_d !== "") {
-				x_distance = document.Form.distance.value;
-				y_distance = -(eval(x_distance)/ux) * (0.5) * g_acc * eval(x_distance) / ux;
-				document.getElementById("answer").textContent = y_distance.toFixed(2) + " m";
+			if ( distance !== "") {
+				answer_height = -(eval(distance)/ux) * (-0.5) * g_acc * eval(distance) / ux;
+				document.getElementById("answer_height").textContent = answer_height.toFixed(2) + " m";
 			} else {
-			document.getElementById("answer").textContent = 'Provide distance to see the result.';
+			document.getElementById("answer_height").textContent = 'Provide distance to see the result.';
+			}
+
+
+			if ( distance !== "" && height !== "") {
+
+				answer_ux = eval(distance)*Math.sqrt(eval(g_acc)/(2*eval(height)));
+				
+				if ( eval(answer_ux) >= 1.2){
+					document.getElementById("answer_chance").textContent = "High chance of foul play Observed.";
+				} else {
+					document.getElementById("answer_chance").textContent = "Moderate chance, more forensic examination is needed." ;
+				}
+
+			} else
+
+			{
+				document.getElementById("answer_chance").textContent = 'Provide both distance and height to see the result.';
 			}
 		}
-		
+
 		function resetForm()
 		{
 			document.Form.name.value = "";
 			document.Form.date.value = "";
 			document.Form.time.value = "";
 			document.Form.distance.value = "";
-			document.getElementById("answer").textContent = 'Provide distance to see the result.';
+			document.Form.height.value = "";
+			document.getElementById("answer_height").textContent = 'Provide distance to see the result.';
+			document.getElementById("answer_chance").textContent = 'Provide both distance and height to see the result.';
+			document.getElementById("distance").classList.add("hide");
+			document.getElementById("height").classList.add("hide");
+			document.getElementById("chance").classList.add("hide");
+		}
+		
+		function hideheight()
+		{
+			document.getElementById("height").classList.add("hide");
+			document.getElementById("chance").classList.remove("hide");
+			document.getElementById("distance").classList.remove("hide");
+		}
 
+		function hidechance()
+		{
+			document.getElementById("height").classList.remove("hide");
+			document.getElementById("chance").classList.add("hide");
+			document.getElementById("distance").classList.remove("hide");
 		}
 	</script>
 </html>
