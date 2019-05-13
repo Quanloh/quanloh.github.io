@@ -166,7 +166,9 @@
 			.hide {
 				display: none;
 			}
-
+            .gray {
+                background-color: gray !important;
+            }
 		</style>
 	</head>
 	<body>
@@ -184,8 +186,8 @@
 								Tool Selection:
 							</span>
 							<div class="form-buttons">
-								<input type="button" name="button_height" value="Falling Height Estimator" OnClick="hidechance()">
-								<input type="button" name="button_chance" value="Foul Play Analyser" OnClick="hideheight()">
+								<input type="button" id="button_height" name="button_height" value="Falling Height Estimator" OnClick="hidechance()">
+								<input type="button" id="button_chance" name="button_chance" value="Foul Play Analyser" OnClick="hideheight()">
 							</div>
 							<hr>
 						</div>
@@ -193,25 +195,25 @@
 
 						<div class="form-item">
 							<label for="name">Name/ID: </label>
-							<input type="text" class="input-column" name="name" placeholder="Name/ID of inspector" data-validate="Name/ID is required">
+							<input type="text" class="input-column" name="name" placeholder="Name/ID of inspector">
 							<span class="input-column"></span>
 						</div>
 
 						<div class="form-item">
 							<label for="date">Date: </label>
-							<input type="date" class="input-column" name="date" data-validate="Date is required">
+							<input type="date" class="input-column" name="date">
 							<span class="input-column"></span>
 						</div>
 
 						<div class="form-item">
 							<label for="time">Time: </label>
-							<input type="time" class="input-column" name="time" data-validate="Time is required">
+							<input type="time" class="input-column" name="time">
 							<span class="input-column"></span>
 						</div>
 
 						<div id="distance" class="form-item hide" >
 							<label for="distance">Distance (unit: meter) </label>
-							<input type="number" class="input-column" name="distance" OnChange="calculate()" data-validate="Distance is required" placeholder="Distance from building edge to victim's hip">
+							<input type="number" class="input-column" name="distance" OnChange="calculate()" placeholder="Distance from building edge to victim's hip">
 							<span class="input-column"></span>
 						</div>
 
@@ -229,7 +231,7 @@
 						<div id="chance" class="hide">
 							<div class="form-item">
 								<label for="Height">Height (unit: meter) </label>
-								<input type="number" class="input-column" name="height" OnChange="calculate()" data-validate="Height is required" placeholder="Expected Falling Height">
+								<input type="number" class="input-column" name="height" OnChange="calculate()" placeholder="Expected Falling Height">
 								<span class="input-column"></span>
 							</div>
 							<hr>
@@ -256,7 +258,7 @@
 		var distance = 0;
 		var height = 0;
 		var g_acc = 9.81; 
-		var ux = 1;
+		var ux = 1.2;
 
 		var answer_height = 0;
 		var answer_ux = 0;
@@ -278,18 +280,20 @@
 
 				answer_ux = eval(distance)*Math.sqrt(eval(g_acc)/(2*eval(height)));
 				
-				if ( eval(answer_ux) >= 1.2){
-					document.getElementById("answer_chance").textContent = "High chance of foul play Observed.";
+				if ( eval(answer_ux) >= 1.5){
+					document.getElementById("answer_chance").textContent = "High chance of foul play observed.";
 				} else {
-					document.getElementById("answer_chance").textContent = "Moderate chance, more forensic examination is needed." ;
-				}
-
-			} else
-
-			{
+					if ( eval(answer_ux) >= 0.7){
+						document.getElementById("answer_chance").textContent = "Moderate chance of foul play observed, more forensic examination is needed.";
+					} else {
+					document.getElementById("answer_chance").textContent = "Low chance of foul play." ;
+					}
+				} 
+			} else {
 				document.getElementById("answer_chance").textContent = 'Provide both distance and height to see the result.';
 			}
 		}
+		
 
 		function resetForm()
 		{
@@ -303,6 +307,8 @@
 			document.getElementById("distance").classList.add("hide");
 			document.getElementById("height").classList.add("hide");
 			document.getElementById("chance").classList.add("hide");
+			document.getElementById("button_height").classList.remove("gray");
+			document.getElementById("button_chance").classList.remove("gray");
 		}
 		
 		function hideheight()
@@ -310,6 +316,8 @@
 			document.getElementById("height").classList.add("hide");
 			document.getElementById("chance").classList.remove("hide");
 			document.getElementById("distance").classList.remove("hide");
+			document.getElementById("button_chance").classList.remove("gray");
+			document.getElementById("button_height").classList.add("gray");
 		}
 
 		function hidechance()
@@ -317,6 +325,8 @@
 			document.getElementById("height").classList.remove("hide");
 			document.getElementById("chance").classList.add("hide");
 			document.getElementById("distance").classList.remove("hide");
+			document.getElementById("button_height").classList.remove("gray");
+			document.getElementById("button_chance").classList.add("gray");
 		}
 	</script>
 </html>
